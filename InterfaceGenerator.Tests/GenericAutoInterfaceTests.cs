@@ -5,12 +5,12 @@ using Xunit;
 
 namespace InterfaceGenerator.Tests;
 
-public class GenericInterfaceTests
+public class GenericAutoInterfaceTests
 {
     [Fact]
     public void GenericParametersGeneratedCorrectly()
     {
-        var t = typeof(IGenericInterfaceTestsService<,>);
+        var t = typeof(IGenericAutoInterfaceTestsService<,>);
         var genericArgs = t.GetGenericArguments();
 
         genericArgs.Should().HaveCount(2);
@@ -28,33 +28,22 @@ public class GenericInterfaceTests
 
         genericArgs[1].IsValueType.Should().BeTrue();
 
-        // does not implement IAutoInterface because not public
-        t.GetInterfaces().Should().HaveCount(0);
-    }
-
-    [Fact]
-    public void ImplementsIAutoInterface()
-    {
-        var t = typeof(IGenericInterfaceTestsService2<,>);
-
+        // base
         var interfaces = t.GetInterfaces();
-        interfaces.Should().HaveCount(1);
-        interfaces[0].Should().Be(typeof(IAutoInterface));
+        interfaces.Should().HaveCount(2);
+        interfaces[0].Name.Should().Be(typeof(IAutoInterface<>).Name);
+        interfaces[1].Name.Should().Be(typeof(IAutoInterface).Name);
+        var interfaceGenericArgs = interfaces[0].GetGenericArguments();
+        interfaceGenericArgs.Should().HaveCount(1);
+        interfaceGenericArgs[0].Name.Should().Be(typeof(GenericAutoInterfaceTestsService<,>).Name);
     }
 }
 
-[GenerateAutoInterface]
+[GenerateGenericAutoInterface]
 // ReSharper disable once UnusedType.Global
-internal class GenericInterfaceTestsService<TX, TY> : IGenericInterfaceTestsService<TX, TY>
-    where TX : class, IEquatable<TX>, new()
+public class GenericAutoInterfaceTestsService<TX, TY> : IGenericAutoInterfaceTestsService<TX, TY>
+    where TX : class, IEquatable<TX>, new ()
     where TY : struct
 {
-}
-
-[GenerateAutoInterface]
-// ReSharper disable once UnusedType.Global
-public class GenericInterfaceTestsService2<TX, TY> : IGenericInterfaceTestsService2<TX, TY>
-    where TX : class, IEquatable<TX>, new()
-    where TY : struct
-{
+    public string A { get; set; }
 }

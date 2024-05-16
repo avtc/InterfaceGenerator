@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <PackageVersion>1.0.14</PackageVersion>
+    <AssemblyVersion>1.0.14</AssemblyVersion>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <Authors>R. David</Authors>
+    <Title>InterfaceGenerator.Contract</Title>
+    <Description>Contract of a source generator that creates interfaces from implementations</Description>
+    <PackageProjectUrl>https://github.com/daver32/InterfaceGenerator</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/daver32/InterfaceGenerator/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/daver32/InterfaceGenerator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageId>$(AssemblyName)</PackageId>
+  </PropertyGroup>
+  
+</Project>
