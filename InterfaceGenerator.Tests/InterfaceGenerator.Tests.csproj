@@ -1,21 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
 
-        <IsPackable>false</IsPackable>
-    </PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="5.10.3" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
-        <PackageReference Include="xunit" Version="2.4.1" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\InterfaceGenerator.Contract\InterfaceGenerator.Contract.csproj" />
-        <ProjectReference Include="..\InterfaceGenerator\InterfaceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    </ItemGroup>
+  <ItemGroup>
+    <!-- Rererence the source generator project -->
+    <ProjectReference Include="..\InterfaceGenerator\InterfaceGenerator.csproj"
+        OutputItemType="Analyzer"
+        ReferenceOutputAssembly="false" />
+    <!-- Don't reference the generator dll -->
+
+    <!-- Rererence the contract project "treat as an analyzer"-->
+    <ProjectReference Include="..\InterfaceGenerator.Contract\InterfaceGenerator.Contract.csproj"
+        OutputItemType="Analyzer"
+        ReferenceOutputAssembly="true" />
+    <!-- We DO reference the contract dll -->
+  </ItemGroup>
 
 </Project>

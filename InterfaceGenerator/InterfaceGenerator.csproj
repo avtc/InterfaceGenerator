@@ -6,7 +6,6 @@
     <PackageVersion>1.0.14</PackageVersion>
     <AssemblyVersion>1.0.14</AssemblyVersion>
 
-    <DevelopmentDependency>true</DevelopmentDependency>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <NoPackageAnalysis>true</NoPackageAnalysis>
@@ -32,7 +31,19 @@
     </PackageReference>
   </ItemGroup>
 
+  <!-- Ensure we specify PrivateAssets so the NuGet doesn't have any dependencies -->
   <ItemGroup>
+    <ProjectReference Include="..\InterfaceGenerator.Contract\InterfaceGenerator.Contract.csproj" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Pack the generator dll in the analyzers/dotnet/cs path -->
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+
+    <!-- Pack the contract dll in the analyzers/dotnet/cs path -->
+    <None Include="$(OutputPath)\InterfaceGenerator.Contract.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+
+    <!-- Pack the contract dll in the lib\netstandard2.0 path -->
+    <None Include="$(OutputPath)\InterfaceGenerator.Contract.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="true" />
   </ItemGroup>
 </Project>

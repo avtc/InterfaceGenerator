@@ -113,7 +113,7 @@ namespace InterfaceGenerator
 
         private static string InferVisibilityModifier(ISymbol implTypeSymbol, AttributeData attributeData)
         {
-            string? result = attributeData.GetNamedParamValue(Constants.VisibilityModifierPropName);
+            string? result = attributeData.GetNamedParamValue(nameof(GenerateAutoInterfaceAttribute.VisibilityModifier));
             if (!string.IsNullOrEmpty(result))
             {
                 return result!;
@@ -128,7 +128,7 @@ namespace InterfaceGenerator
 
         private static string InferInterfaceName(ISymbol implTypeSymbol, AttributeData attributeData)
         {
-            return attributeData.GetNamedParamValue(Constants.GenerateAutoInterfaceAttribute) ?? $"I{implTypeSymbol.Name}";
+            return attributeData.GetNamedParamValue(nameof(GenerateAutoInterfaceAttribute.Name)) ?? $"I{implTypeSymbol.Name}";
         }
 
         private string GenerateInterfaceCode(INamedTypeSymbol implTypeSymbol, AttributeData attributeData)
@@ -177,11 +177,11 @@ namespace InterfaceGenerator
                 return;
             if (attributeData.AttributeClass!.Is(_generateAutoInterfaceAttribute))
             {
-                codeWriter.Write($" : {Constants.AttributesNamespace}.{Constants.IAutoInterface}");
+                codeWriter.Write($" : {typeof(IAutoInterface).Namespace}.{nameof(IAutoInterface)}");
             }
             else if (attributeData.AttributeClass!.Is(_generateGenericAutoInterfaceAttribute))
             {
-                codeWriter.Write($" : {Constants.AttributesNamespace}.{Constants.IAutoInterface}<{implTypeSymbol.Name}");
+                codeWriter.Write($" : {typeof(IAutoInterface).Namespace}.{nameof(IAutoInterface)}<{implTypeSymbol.Name}");
                 WriteTypeGenericsIfNeeded(codeWriter, implTypeSymbol);
                 codeWriter.Write(">");
             }
@@ -455,13 +455,13 @@ namespace InterfaceGenerator
         private void InitAttributes(Compilation compilation)
         {
             _generateAutoInterfaceAttribute = compilation.GetTypeByMetadataName(
-                $"{Constants.AttributesNamespace}.{Constants.GenerateAutoInterfaceAttribute}")!;
+                $"{typeof(GenerateAutoInterfaceAttribute).Namespace}.{nameof(GenerateAutoInterfaceAttribute)}")!;
 
             _generateGenericAutoInterfaceAttribute = compilation.GetTypeByMetadataName(
-                $"{Constants.AttributesNamespace}.{Constants.GenerateGenericAutoInterfaceAttribute}")!;
+                $"{typeof(GenerateGenericAutoInterfaceAttribute).Namespace}.{nameof(GenerateGenericAutoInterfaceAttribute)}")!;
 
             _ignoreAttribute = compilation.GetTypeByMetadataName(
-                $"{Constants.AttributesNamespace}.{Constants.AutoInterfaceIgnoreAttribute}")!;
+                $"{typeof(AutoInterfaceIgnoreAttribute).Namespace}.{nameof(AutoInterfaceIgnoreAttribute)}")!;
         }
 
         private static IEnumerable<INamedTypeSymbol> GetImplTypeSymbols(Compilation compilation, SyntaxReceiver receiver)
