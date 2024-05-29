@@ -12,6 +12,10 @@ namespace InterfaceGenerator
     {
         public string? VisibilityModifier { get; set; }
         public string? Name { get; set; }
+        /// <summary>
+        /// Default is "I{Name}"
+        /// </summary>
+        public string NameTemplate { get; set; } = "I{Name}";
 
         public GenerateGenericAutoInterfaceAttribute()
         {

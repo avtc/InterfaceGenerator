@@ -128,7 +128,9 @@ namespace InterfaceGenerator
 
         private static string InferInterfaceName(ISymbol implTypeSymbol, AttributeData attributeData)
         {
-            return attributeData.GetNamedParamValue(nameof(GenerateAutoInterfaceAttribute.Name)) ?? $"I{implTypeSymbol.Name}";
+            return attributeData.GetNamedParamValue(nameof(GenerateAutoInterfaceAttribute.Name))
+                ?? attributeData.GetNamedParamValue(nameof(GenerateAutoInterfaceAttribute.NameTemplate))?.Replace("{Name}", implTypeSymbol.Name)
+                ?? $"I{implTypeSymbol.Name}";
         }
 
         private string GenerateInterfaceCode(INamedTypeSymbol implTypeSymbol, AttributeData attributeData)
