@@ -21,6 +21,7 @@ namespace InterfaceGenerator
         private INamedTypeSymbol _generateAutoInterfaceAttribute = null!;
         private INamedTypeSymbol _generateGenericAutoInterfaceAttribute = null!;
         private INamedTypeSymbol _ignoreAttribute = null!;
+        private INamedTypeSymbol _nameTemplateAttribute = null!;
 
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -113,7 +114,7 @@ namespace InterfaceGenerator
 
         private static string InferVisibilityModifier(ISymbol implTypeSymbol, AttributeData attributeData)
         {
-            string? result = attributeData.GetNamedParamValue(nameof(GenerateAutoInterfaceAttribute.VisibilityModifier));
+            string? result = attributeData.GetParamValue<string>(nameof(GenerateAutoInterfaceAttribute.VisibilityModifier));
             if (!string.IsNullOrEmpty(result))
             {
                 return result!;
@@ -126,10 +127,14 @@ namespace InterfaceGenerator
             };
         }
 
-        private static string InferInterfaceName(ISymbol implTypeSymbol, AttributeData attributeData)
+        private string InferInterfaceName(ISymbol implTypeSymbol, AttributeData attributeData)
         {
-            return attributeData.GetNamedParamValue(nameof(GenerateAutoInterfaceAttribute.Name))
-                ?? attributeData.GetNamedParamValue(nameof(GenerateAutoInterfaceAttribute.NameTemplate))?.Replace("{Name}", implTypeSymbol.Name)
+            return attributeData.GetParamValue<string>(nameof(GenerateAutoInterfaceAttribute.Name))
+                ?? attributeData.GetParamValue<string>(nameof(GenerateAutoInterfaceAttribute.NameTemplate))?.Replace("{Name}", implTypeSymbol.Name)
+                ?? (attributeData.AttributeClass?.TryGetAttribute(_nameTemplateAttribute, out var nameTemplateAttributes) == true
+                    ? nameTemplateAttributes.First().GetParamValue<string>(
+                        nameof(AutoInterfaceNameTemplateAttribute.NameTemplate))!.Replace("{Name}", implTypeSymbol.Name)
+                    : null)
                 ?? $"I{implTypeSymbol.Name}";
         }
 
@@ -464,6 +469,9 @@ namespace InterfaceGenerator
 
             _ignoreAttribute = compilation.GetTypeByMetadataName(
                 $"{typeof(AutoInterfaceIgnoreAttribute).Namespace}.{nameof(AutoInterfaceIgnoreAttribute)}")!;
+
+            _nameTemplateAttribute = compilation.GetTypeByMetadataName(
+                $"{typeof(AutoInterfaceNameTemplateAttribute).Namespace}.{nameof(AutoInterfaceNameTemplateAttribute)}")!;
         }
 
         private static IEnumerable<INamedTypeSymbol> GetImplTypeSymbols(Compilation compilation, SyntaxReceiver receiver)

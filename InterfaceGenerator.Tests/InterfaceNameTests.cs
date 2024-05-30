@@ -12,12 +12,23 @@ internal class CustomName2 : IPrefixCustomName2Suffix
 
 }
 
-[NestedCustomName(NameTemplate = "INested{Name}")]
+[NestedCustomName3(NameTemplate = "INested{Name}")]
 internal class CustomName3 : INestedCustomName3
 {
 
 }
 
-public class NestedCustomNameAttribute : GenerateAutoInterfaceAttribute
+public class NestedCustomName3Attribute : GenerateAutoInterfaceAttribute
+{
+}
+
+[NestedCustomName4]
+public class CustomName4 : INestedCustomName4
+{
+
+}
+
+[AutoInterfaceNameTemplate("INested{Name}")]
+public class NestedCustomName4Attribute : GenerateGenericAutoInterfaceAttribute
 {
 }
